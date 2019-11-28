@@ -156,8 +156,8 @@ alarmMessage_t MakeAlarmPayload(char type){
 
   alarmMessage_t payload = {type, 
                             GetTimestamp(), 
-                            readingsLDR->data, 
-                            readingsUltrasonic->data, 
+                            readingsLDR == NULL ? 0 : readingsLDR->data, 
+                            readingsUltrasonic == NULL ? 0 : readingsUltrasonic->data,
                             bitmapStore};
   return payload;
 }
