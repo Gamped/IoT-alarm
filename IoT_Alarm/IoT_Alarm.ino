@@ -2,6 +2,7 @@
 #include "PIR.h"
 #include "LDR.h"
 #include "Ultrasonic.h"
+#include "AlarmLight.h"
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -20,16 +21,16 @@
 PIR pir(PIR_SIG);
 LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
+AlarmLight alarmLight(LED_RED);
 
 /* ======== Setup ======== */
 void setup() {
     Serial.begin(9600);
-    pinMode(LED_RED, OUTPUT);
 }
 
 /* ======== Loop ======== */
 void loop() {
-    digitalWrite(LED_RED, pir.Read());
+    alarmLight.SetLight(pir.Read());
 
     Serial.println("======= LDR =======");
     Serial.println(ldr.Read());
