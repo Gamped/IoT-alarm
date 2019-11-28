@@ -1,6 +1,7 @@
 /* ======== Includes ======== */
 #include "PIR.h"
 #include "LDR.h"
+#include "Ultrasonic.h"
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -18,6 +19,7 @@
 /* ======== Global variables ======== */
 PIR pir(PIR_SIG);
 LDR ldr(LDR_SIG);
+Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 
 /* ======== Setup ======== */
 void setup() {
@@ -28,6 +30,11 @@ void setup() {
 /* ======== Loop ======== */
 void loop() {
     digitalWrite(LED_RED, pir.Read());
+
+    Serial.println("======= LDR =======");
     Serial.println(ldr.Read());
-    delay(150);
+    Serial.println("======= Ultrasonic =======");
+    Serial.println(ultrasonic.ReadMicroseconds());
+    Serial.println(ultrasonic.ReadCM());
+    delay(500);
 }
