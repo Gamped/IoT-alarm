@@ -5,11 +5,10 @@
 #define HOUR_TWO_SEC 1800
 #define MILLIS_TO_TWO_SEC 2000
 
-
 /* 
- * ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
+ * ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
  * NOTE: Dette vil selvfølgelig blive struktureret i forskellige filer :)
- * ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
+ * ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
  */
 
 /* ========================== */
@@ -40,7 +39,8 @@ typedef struct longReadings {
 
 /* ========================== */
 /* Global variables */ 
-//TODO: Implementer eget main loop, hvor disse er ikke er globale boolReadings_t *readingsPIR = NULL;
+//TODO: Implementer eget main loop, hvor disse er ikke er globale 
+boolReadings_t *readingsPIR = NULL;
 longReadings_t *readingsLDR = NULL;
 longReadings_t *readingsUltrasonic = NULL;
 
@@ -61,14 +61,9 @@ void loop() {
 /* Alarm measurement- and check functions*/
 // TODO: Find en måde at undgå copy-pasta kode her :D
 
-void CheckForAlarm(){
- // TODO: Denne funktion skal laves når der er taget stilling
- // til kriterier for en udløst alarm
-}
-
 // Writes a new index to the PIR readings queue, removes last index
 void UpdatePIRReadings(bool reading){
-  // If intial
+  // If intializing
   if (readingsPIR == NULL){
     readingsPIR = malloc(sizeof boolReadings_t));
     readingsPIR->data = reading;
@@ -87,9 +82,7 @@ void UpdatePIRReadings(bool reading){
       // Ensure not to work on a NULL
       if (curr->next == NULL) { 
         return; // As nothing else needs to be done
-      } else {
-        curr = curr->next;
-      }
+      } else { curr = curr->next; }
     }
     free(curr->next);
     curr->next = NULL;
@@ -98,7 +91,7 @@ void UpdatePIRReadings(bool reading){
 
 // Writes a new index to the LDR readings queue, removes last index
 void UpdateLDRReadings(long reading){
-  // If intial
+  // If intializing
   if (readingsLDR == NULL){
     readingsLDR = malloc(sizeof(longReadings_t));
     readingsLDR->data = reading;
@@ -117,9 +110,7 @@ void UpdateLDRReadings(long reading){
       // Ensure not to work on a NULL
       if (curr->next == NULL) { 
         return; // As nothing else needs to be done
-      } else {
-        curr = curr->next;
-      }
+      } else { curr = curr->next; }
     }
     free(curr->next);
     curr->next = NULL;
@@ -128,7 +119,7 @@ void UpdateLDRReadings(long reading){
 
 // Writes a new index to the Ultrasonic readings queue, removes last index
 void UpdateUltrasonicReadings(long reading){
-  // If intial
+  // If intializing
   if (readingsUltrasonic == NULL){
     readingsUltrasonic = malloc(sizeof(longReadings_t));
     readingsUltrasonic->data = reading;
@@ -147,9 +138,7 @@ void UpdateUltrasonicReadings(long reading){
       // Ensure not to work on a NULL
       if (curr->next == NULL) { 
         return; // As nothing else needs to be done
-      } else {
-        curr = curr->next;
-      }
+      } else { curr = curr->next; }
     }
     free(curr->next);
     curr->next = NULL;
