@@ -12,6 +12,5 @@ LDR::LDR(int pin){
 
 // Reads the PIR and returns if it's been triggered
 int LDR::Read(){
-    int result = analogRead(ldrPin);
-    return result;
+    return analogRead(ldrPin);
 }

@@ -53,6 +53,5 @@ void loop() {
 // Function that reads from the RFID card reader if an RFID card is present
 // TODO: Move to own class & verification method to only allow verified cards
 bool ReadRFID(){
-    bool result = mfrc522.PICC_IsNewCardPresent();
-    return result;
+    return mfrc522.PICC_IsNewCardPresent();
 }
