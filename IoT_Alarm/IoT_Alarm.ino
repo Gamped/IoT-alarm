@@ -5,6 +5,7 @@
 #include "AlarmLight.h"
 #include <SPI.h>
 #include <MFRC522.h>
+#include "AlarmTime.h"
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -26,6 +27,7 @@ Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
 MFRC522 mfrc522(RFID_SDA, RFID_RST);
 byte readCard[4];
+AlarmTime time;
 
 /* ======== Setup ======== */
 void setup() {
@@ -45,6 +47,8 @@ void loop() {
     Serial.println(ultrasonic.ReadCM());
     Serial.println("======= RFID =======");
     Serial.println(ReadRFID());
+    Serial.println("======= TIME =======");
+    time.PrintTimeTwoSecFormat(time.GetSystemTimeTwoSecFormat());
     delay(500);
 }
 
