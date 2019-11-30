@@ -3,6 +3,9 @@
 #include "LDR.h"
 #include "Ultrasonic.h"
 #include "AlarmLight.h"
+#include <SPI.h>
+#include <MFRC522.h>
+#include "AlarmTime.h"
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -22,10 +25,15 @@ PIR pir(PIR_SIG);
 LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
+MFRC522 mfrc522(RFID_SDA, RFID_RST);
+byte readCard[4];
+AlarmTime time;
 
 /* ======== Setup ======== */
 void setup() {
     Serial.begin(9600);
+    SPI.begin(); 
+    mfrc522.PCD_Init(); 
 }
 
 /* ======== Loop ======== */
@@ -34,8 +42,20 @@ void loop() {
 
     Serial.println("======= LDR =======");
     Serial.println(ldr.Read());
-    Serial.println("======= Ultrasonic =======");
+    Serial.println("======= Ultrasonic ======="); 
     Serial.println(ultrasonic.ReadMicroseconds());
     Serial.println(ultrasonic.ReadCM());
+    Serial.println("======= RFID =======");
+    Serial.println(ReadRFID());
+    Serial.println("======= TIME =======");
+    time.PrintTimeTwoSecFormat(time.GetSystemTimeTwoSecFormat());
     delay(500);
+}
+
+/* ======== Non-class functions ======== */
+
+// Function that reads from the RFID card reader if an RFID card is present
+// TODO: Move to own class & verification method to only allow verified cards
+bool ReadRFID(){
+    return mfrc522.PICC_IsNewCardPresent();
 }
