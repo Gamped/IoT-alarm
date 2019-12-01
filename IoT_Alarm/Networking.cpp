@@ -9,14 +9,14 @@
 
 // Constructor
 Networking::Networking(){
-    Networking::mesageQueue = NULL;
+    Networking::messageQueue = NULL;
     Networking::lastMessageSent = 0;
 }
 
 // Send alarm message ... with simulated delay
-void Networking::SendAlarmMessage(alarmMessage_t message){
+void Networking::SendAlarmMessage(alarmMessage_t *message){
     delay(NETWORK_DELAY_MS);
-    Serial.println("=== !ALARM! ===")
+    Serial.println("=== !ALARM! ===");
     Serial.println(message->type);
     Serial.println(message->timeStamp);
     Serial.println(message->valueLDR);
@@ -27,19 +27,19 @@ void Networking::SendAlarmMessage(alarmMessage_t message){
 
 // Check the queue if a message should be sent, and if alllowed to send
 void Networking::CheckAlarmMessageQueue(){
-    if (mesageQueue != NULL) {
+    if (Networking::messageQueue != NULL) {
         // Verify time between messages are meeting required wait-time
         if (Networking::lastMessageSent == 0 || millis() - Networking::lastMessageSent >= MS_BETWEEN_MSG){
             // Send message
-            Networking::SendAlarmMessage(Networking::mesageQueue->data);
+            Networking::SendAlarmMessage(Networking::messageQueue->data);
 
             // Remove first index (and replace)
-            if (Networking::mesageQueue->next == NULL){
-                Networking::mesageQueue = NULL;
+            if (Networking::messageQueue->next == NULL){
+                Networking::messageQueue = NULL;
             } else {
-                alarmMessageQueue_t *temp = Networking::mesageQueue->next;
-                free(Networking::mesageQueue);
-                Networking::mesageQueue = temp;
+                alarmMessageQueue_t *temp = Networking::messageQueue->next;
+                free(Networking::messageQueue);
+                Networking::messageQueue = temp;
             }
         }
     }
@@ -51,13 +51,27 @@ void Networking::ResetMessageDelay(){
 }
 
 // Adds a message to the message queue
-void Networking::AddMessageToQueue(alarmMessage_t msg){
+void Networking::AddMessageToQueue(char type, 
+                                   short timeStamp, 
+                                   long valueLDR, 
+                                   long valueUltrasonic, 
+                                   char bitmap){
+    // Make new message
+    alarmMessage_t *msg = malloc(sizeof(alarmMessage_t));
+    
+    msg->type = type;
+    msg->timeStamp = timeStamp;
+    msg->valueLDR = valueLDR;
+    msg->valueUltrasonic = valueUltrasonic;
+    msg->bitmap = bitmap;
+                                    
+    // Add message to queue
     if (Networking::messageQueue == NULL){
         Networking::messageQueue = malloc(sizeof(alarmMessageQueue_t));
-        Networking::mesageQueue->data = msg;
+        Networking::messageQueue->data = msg;
     } else {
         alarmMessageQueue_t *newIndex = malloc(sizeof(alarmMessageQueue_t));
-        alarmMessageQueue_t current = Networking::mesageQueue;
+        alarmMessageQueue_t *current = Networking::messageQueue;
         
         // Scroll through queue to find end
         while (current->next != NULL){
@@ -68,21 +82,4 @@ void Networking::AddMessageToQueue(alarmMessage_t msg){
         newIndex->data = msg;
         current->next = newIndex;
     }
-}
-
-// Construct an alarmMessage
-alarmMessage_t Networking::MakeAlarmMessage(char type, 
-                                            short timeStamp, 
-                                            long valueLDR, 
-                                            long valueUltrasonic, 
-                                            char bitmap){
-    alarmMessage_t *newMessage = malloc(sizeof(alarmMessage_t));
-    
-    newMessage->type = type;
-    newMessage->timeStamp = timeStamp;
-    newMessage->valueLDR = valueLDR;
-    newMessage->valueUltrasonic = valueUltrasonic;
-    newMessage->bitmap = bitmap;
-    
-    return newMessage;
 }

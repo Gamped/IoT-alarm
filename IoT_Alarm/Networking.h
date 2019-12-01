@@ -18,7 +18,7 @@ typedef struct alarmMessage {
 
 // Queue for alarm messages
 typedef struct alarmMessageQueue {
-  alarmMessage_t data;
+  alarmMessage_t *data;
   struct alarmMessageQueue *next;
 } alarmMessageQueue_t;
 
@@ -26,17 +26,16 @@ class Networking{
     private:
         alarmMessageQueue_t *messageQueue;
         unsigned long lastMessageSent;
-        void SendAlarmMessage(alarmMessage_t message);
+        void SendAlarmMessage(alarmMessage_t *message);
     public:
         Networking();
         void CheckAlarmMessageQueue();
         void ResetMessageDelay();
-        void AddMessageToQueue(alarmMessage_t msg);
-        alarmMessage_t MakeAlarmMessage(char type, 
-                                        short timeStamp, 
-                                        long valueLDR, 
-                                        long valueUltrasonic, 
-                                        char bitmap);
+        void AddMessageToQueue(char type, 
+                               short timeStamp, 
+                               long valueLDR, 
+                               long valueUltrasonic, 
+                               char bitmap);
 };
 
 #endif
