@@ -6,10 +6,10 @@
 
 // Constructor
 Ultrasonic::Ultrasonic(int echoPin, int trigPin){
-    ultrasonicEchoPin = echoPin;
-    ultrasonicTrigPin = trigPin;
-    pinMode(ultrasonicEchoPin, INPUT);
-    pinMode(ultrasonicTrigPin, OUTPUT);
+    Ultrasonic::ultrasonicEchoPin = echoPin;
+    Ultrasonic::ultrasonicTrigPin = trigPin;
+    pinMode(Ultrasonic::ultrasonicEchoPin, INPUT);
+    pinMode(Ultrasonic::ultrasonicTrigPin, OUTPUT);
 }
 
 // Private function to convert microseconds into centimeters
@@ -20,14 +20,14 @@ unsigned long Ultrasonic::ConvertToCM(unsigned long microseconds){
 // Function to get the microseconds it takes to send/recieve sonar
 unsigned long Ultrasonic::ReadMicroseconds(){
     // Ping sensor to send out sonar
-    digitalWrite(ultrasonicTrigPin, LOW);
+    digitalWrite(Ultrasonic::ultrasonicTrigPin, LOW);
     delayMicroseconds(2);
-    digitalWrite(ultrasonicTrigPin, HIGH);
+    digitalWrite(Ultrasonic::ultrasonicTrigPin, HIGH);
     delayMicroseconds(10);
-    digitalWrite(ultrasonicTrigPin, LOW);
+    digitalWrite(Ultrasonic::ultrasonicTrigPin, LOW);
 
     // Return the time it took to get sound back
-    return pulseIn(ultrasonicEchoPin, HIGH);
+    return pulseIn(Ultrasonic::ultrasonicEchoPin, HIGH);
 }
 
 // Function which triggers the reading and returns distance in centimeter

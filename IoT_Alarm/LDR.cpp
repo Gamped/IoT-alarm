@@ -6,11 +6,11 @@
 
 // Constructor
 LDR::LDR(int pin){
-    ldrPin = pin;
-    pinMode(ldrPin, INPUT);
+    LDR::ldrPin = pin;
+    pinMode(LDR::ldrPin, INPUT);
 }
 
 // Reads the LDR and returns if it's been triggered
 int LDR::Read(){
-    return analogRead(ldrPin);
+    return analogRead(LDR::ldrPin);
 }
