@@ -9,19 +9,6 @@
 /* ========================== */
 /* Custom types */
 
-typedef struct alarmMessage {
-  char type;
-  short timeStamp;
-  long valueLDR;
-  long valueUltrasonic;
-  char bitmap; 
-} alarmMessage_t;
-
-typedef struct alarmMessageQueue {
-  alarmMessage_t data;
-  struct alarmMessageQueue *next;
-} alarmMessageQueue_t;
-
 typedef struct boolReadings {
   bool data;
   struct boolReadings *next;
@@ -138,21 +125,4 @@ void UpdateUltrasonicReadings(long reading){
     free(curr->next);
     curr->next = NULL;
   }
-}
-
-/* ========================== */
-/* Payload functions */
-
-// Make payload
-alarmMessage_t MakeAlarmPayload(char type){
-  char bitmapStore;
-
-  // TODO: Implement bitmap when RFID implementation is done (decision on how to handle)
-
-  alarmMessage_t payload = {type, 
-                            GetTimestamp(), 
-                            readingsLDR == NULL ? 0 : readingsLDR->data, 
-                            readingsUltrasonic == NULL ? 0 : readingsUltrasonic->data,
-                            bitmapStore};
-  return payload;
 }
