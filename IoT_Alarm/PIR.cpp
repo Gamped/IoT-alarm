@@ -6,11 +6,11 @@
 
 // Constructor
 PIR::PIR(int pin){
-    pirPin = pin;
-    pinMode(pirPin, INPUT);
+    PIR::pirPin = pin;
+    pinMode(PIR::pirPin, INPUT);
 }
 
 // Reads the PIR and returns if it's been triggered
 bool PIR::Read(){
-    return digitalRead(pirPin);
+    return digitalRead(PIR::pirPin);
 }
