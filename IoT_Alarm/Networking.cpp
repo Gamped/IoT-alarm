@@ -7,9 +7,7 @@
 #define MS_BETWEEN_MSG 600000
 
 // Constructor
-Networking::Networking(){
-    Networking::lastMessageSent = 0;
-}
+Networking::Networking(){ Networking::lastMessageSent = 0; }
 
 // Send alarm message
 void Networking::SendAlarmMessage(AlarmMessage msg){
@@ -37,6 +35,7 @@ void Networking::CheckAlarmMessageQueue(){
                 // Just allow overwrite of its data, as it is the first element
                 Networking::messageQueue.containsData = false;
             }
+
             // Set time for last message sent
             Networking::lastMessageSent = millis();
         }
@@ -44,15 +43,12 @@ void Networking::CheckAlarmMessageQueue(){
 }
 
 // Resets the time since last message counter
-void Networking::ResetMessageDelay(){
-    Networking::lastMessageSent = millis() < MS_BETWEEN_MSG ? 0 : millis() - MS_BETWEEN_MSG;
-}
+void Networking::ResetMessageDelay(){ Networking::lastMessageSent = 0; }
 
 // Adds a message to the message queue
 void Networking::AddMessageToQueue(AlarmMessage msg, int ID){                            
     if (!Networking::messageQueue.containsData){
         Networking::messageQueue.data = msg;
-        Networking::messageQueue.ID = ID;
         Networking::messageQueue.containsData = true;
     } else {
         AlarmMessageQueue *current; 
@@ -68,7 +64,6 @@ void Networking::AddMessageToQueue(AlarmMessage msg, int ID){
         current->next = new AlarmMessageQueue;
         current->next->data = msg;
         current->next->containsData = true;
-        current->next->ID = ID;
         current->hasEntryBehindInQueue = true; 
     }
 }

@@ -11,6 +11,4 @@ LDR::LDR(int pin){
 }
 
 // Reads the LDR and returns if it's been triggered
-int LDR::Read(){
-    return analogRead(LDR::ldrPin);
-}
+int LDR::Read(){ return analogRead(LDR::ldrPin); }

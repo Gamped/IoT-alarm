@@ -21,7 +21,6 @@ class AlarmMessage {
 class AlarmMessageQueue {
     public:
         AlarmMessage data;
-        int ID;
         bool containsData = false; // Since C++ object cannot be NULL
         bool hasEntryBehindInQueue = false; // Since C++ object cannot be NULL
         AlarmMessageQueue * next;
