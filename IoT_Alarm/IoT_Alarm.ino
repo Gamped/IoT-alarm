@@ -8,6 +8,7 @@
 #include "AlarmTime.h"
 #include "Networking.h"
 #include "AlarmChecker.h"
+#include "Readings.h"
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -32,6 +33,7 @@ byte readCard[4];
 AlarmTime time;
 Networking network;
 AlarmChecker alarmChecker;
+Readings readings;
 
 /* ======== Setup ======== */
 void setup() {
