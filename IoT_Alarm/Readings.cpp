@@ -8,12 +8,29 @@
 Readings::Readings(){}
 
 // Function to update a list, removing the last index if above limit
-void Readings::UpdateList(ReadingElemet * list, ReadingElemet * toBeAdded){
+void Readings::UpdateList(ReadingElement * list, ReadingElement * toBeAdded){
     // If first reading ever
-    if (!list->containsData && !list->hasEntryBehindInList){
+    if (!list->containsData && !list->hasEntryAfterInList){
         list = toBeAdded;
     } else {
-        /* code */
+        ReadingElement temp = *list;
+
+        // Add toBeAdded as first element
+        toBeAdded->next = &temp;
+        toBeAdded->hasEntryAfterInList = true;
+        list = toBeAdded;
+
+        // Scroll through to see if list is too long
+        ReadingElement * current = list;
+        for (int i; i < (int)READING_LIST_SIZE; i++){
+            if (current->hasEntryAfterInList){
+                current = current->next;
+            } else return; // As no need to do more, due to list being shorter
+        }
+        
+        // If it got this far, then remove last element
+        delete current->next;
+        current->hasEntryAfterInList = false;
     }
 }
 
@@ -42,6 +59,12 @@ void Readings::AddLDRReading(int reading){
 }
 
 // Getters
-ReadingElementBool Readings::GetReadingsPIR(){ return readingsPIR; }
-ReadingElementUnsignedLong Readings::GetReadingsUltrasonic(){ return readingsUltrasonic; }
-ReadingElementInt Readings::GetReadingsLDR(){ return readingsLDR; }
+ReadingElementBool Readings::GetReadingsPIR(){ 
+    return Readings::readingsPIR; 
+}
+ReadingElementUnsignedLong Readings::GetReadingsUltrasonic(){ 
+    return Readings::readingsUltrasonic; 
+}
+ReadingElementInt Readings::GetReadingsLDR(){ 
+    return Readings::readingsLDR; 
+}

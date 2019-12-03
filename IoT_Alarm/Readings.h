@@ -10,23 +10,23 @@
 #define READING_LIST_SIZE 15
 
 // A "linked list" class for keeping readings
-class ReadingElemet{
+class ReadingElement{
     public:
         bool containsData = false; // Since C++ object cannot be NULL
-        bool hasEntryBehindInList = false; // Since C++ object cannot be NULL
-        ReadingElemet * next;
+        bool hasEntryAfterInList = false; // Since C++ object cannot be NULL
+        ReadingElement * next;
 };
 
 // Child classes for the data types, as no support for "auto" in classes :(
-class ReadingElementBool : public ReadingElemet {
+class ReadingElementBool : public ReadingElement {
     public:
         bool data;
 };
-class ReadingElementUnsignedLong : public ReadingElemet {
+class ReadingElementUnsignedLong : public ReadingElement {
     public:
         unsigned long data;
 };
-class ReadingElementInt : public ReadingElemet {
+class ReadingElementInt : public ReadingElement {
     public:
         int data;
 };
@@ -38,16 +38,16 @@ class Readings{
         ReadingElementBool readingsPIR;
         ReadingElementUnsignedLong readingsUltrasonic;
         ReadingElementInt readingsLDR;
-        void UpdateList(ReadingElemet * list, 
-                        ReadingElemet * toBeAdded);
+        void UpdateList(ReadingElement * list, 
+                        ReadingElement * toBeAdded);
     public:
         Readings();
         void AddPIRReading(bool reading);
         void AddUltrasonicReading(unsigned long reading);
         void AddLDRReading(int reading);
-        ReadingElemet GetReadingsPIR();
-        ReadingElemet GetReadingsUltrasonic();
-        ReadingElemet GetReadingsLDR();
+        ReadingElementBool GetReadingsPIR();
+        ReadingElementUnsignedLong GetReadingsUltrasonic();
+        ReadingElementInt GetReadingsLDR();
 };
 
 #endif
