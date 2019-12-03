@@ -44,7 +44,7 @@ double AlarmChecker::CalculateVariance(){
 // Check if an alarm has happened
 // Returns alarm type OR 'A' for no alarm
 char AlarmChecker::CheckForAlarm(bool pir, 
-                                unsigned long ultrasonic, 
-                                int ldr){
+                                 unsigned long ultrasonic, 
+                                 int ldr){
     //
 }
