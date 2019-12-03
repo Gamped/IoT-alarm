@@ -35,9 +35,9 @@ class ReadingElementInt : public ReadingElemet {
 class Readings{
     private:
         bool lastPIRReading;
-        ReadingElemet readingsPIR;
-        ReadingElemet readingsUltrasonic;
-        ReadingElemet readingsLDR;
+        ReadingElementBool readingsPIR;
+        ReadingElementUnsignedLong readingsUltrasonic;
+        ReadingElementInt readingsLDR;
         void UpdateList(ReadingElemet * list, 
                         ReadingElemet * toBeAdded);
     public:
