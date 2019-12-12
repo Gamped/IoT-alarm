@@ -20,6 +20,7 @@ bool AlarmChecker::CheckUltrasonic(Readings *r, unsigned long reading){
     }
     return false;
 }
+
 // Check if there should be alarm, and if not add to readings
 bool AlarmChecker::CheckLDR(Readings *r, int reading){
     // If there is a reading

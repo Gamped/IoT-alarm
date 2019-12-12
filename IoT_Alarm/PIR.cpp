@@ -11,6 +11,4 @@ PIR::PIR(int pin){
 }
 
 // Reads the PIR and returns if it's been triggered
-bool PIR::Read(){
-    return digitalRead(PIR::pirPin);
-}
+bool PIR::Read(){ return digitalRead(PIR::pirPin); }
