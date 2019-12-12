@@ -12,8 +12,8 @@ AlarmChecker::AlarmChecker(){ }
 
 // Calculate the chance of a reading happening using normal distribution
 double AlarmChecker::CalculateChance(double result, 
-                                    double my, 
-                                    double sigma){
+                                     double my, 
+                                     double sigma){
     double base = 0.0, exponent = 0.0; // of last pow() in equation
 
     // Calculate base
@@ -29,11 +29,6 @@ double AlarmChecker::CalculateChance(double result,
 
     // Return result
     return pow(base, exponent);
-}
-
-// Calculate the variance
-double AlarmChecker::CalculateVariance(){
-
 }
 
 // Check if an alarm has happened

@@ -23,6 +23,8 @@ class Readings{
         void ReadingLDR(int reading);
         double GetUltrasonicMean();
         double GetLDRMean();
+        double GetUltrasonicVariance();
+        double GetLDRVariance();        
         bool GetPIRReading();
 };
 

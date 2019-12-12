@@ -71,7 +71,9 @@ void setup() {
     readings.ReadingPIR(true);
     Serial.println(readings.GetUltrasonicMean());
     Serial.println(readings.GetLDRMean());
-    Serial.println(readings.GetPIRReading());    
+    Serial.println(readings.GetPIRReading()); 
+    Serial.println(readings.GetLDRVariance());
+    Serial.println(readings.GetUltrasonicVariance());   
 }
 
 /* ======== Loop ======== */

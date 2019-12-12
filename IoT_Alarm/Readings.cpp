@@ -52,5 +52,27 @@ double Readings::GetLDRMean(){
     return sum / (double)READING_LIST_SIZE;;
 }
 
+// Calculate and return the variance of ultrasonic readings
+double Readings::GetUltrasonicVariance(){
+    double varSum = 0.0, mean = Readings::GetUltrasonicMean();
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        varSum +=  pow(((double)Readings::readingsUltrasonic[i] - mean), 2);
+    }
+    
+    return varSum / (double)READING_LIST_SIZE;;
+}
+
+// Calculate and return the variance of LDR readings
+double Readings::GetLDRVariance(){
+    double varSum = 0.0, mean = Readings::GetLDRMean();
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        varSum +=  pow(((double)Readings::readingsLDR[i] - mean), 2);
+    }
+    
+    return varSum / (double)READING_LIST_SIZE;
+}    
+
 // Return the PIR reading
 bool Readings::GetPIRReading(){ return Readings::lastPIRReading; }
