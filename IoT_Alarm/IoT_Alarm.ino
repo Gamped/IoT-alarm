@@ -41,6 +41,9 @@ void setup() {
     SPI.begin(); 
 //    mfrc522.PCD_Init(); 
     InitReadings();
+    alarmLight.SetLight(true);
+    delay(2000);
+    alarmLight.SetLight(false);
     MeasureFunction(100);
 }
 
@@ -77,13 +80,16 @@ void InitReadings(){
 }
 
 void MeasureFunction(int times){
-    unsigned long highestTime, startTime, time;
+    unsigned long highestTime = 0, startTime = 0, time = 0;
 
     for (int i = 0; i < times; i++){
         startTime = millis();
 
         // Function to take time off:
-
+            char result = alarmChecker.CheckForAlarm(&readings,
+                               1,
+                               1,
+                               1);
         // ========================
 
         time = millis() - startTime;
