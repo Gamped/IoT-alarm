@@ -1,0 +1,78 @@
+/*
+    Code file for keeping readings from sensors
+*/
+#include "Arduino.h"
+#include "Readings.h"
+
+// Constructors
+Readings::Readings(){}
+
+// Set the last PIR reading to reading
+void Readings::ReadingPIR(bool reading){
+    Readings::lastPIRReading = reading;
+}
+
+// Save the last ultrasonic reading, and move pointer to next array index
+void Readings::ReadingUltrasonic(unsigned long reading){
+    Readings::readingsUltrasonic[Readings::nextUltrasonicIndex] = reading;
+    
+    if (Readings::nextUltrasonicIndex >= ((int)READING_LIST_SIZE - 1)){
+        Readings::nextUltrasonicIndex = 0;
+    } else Readings::nextUltrasonicIndex++;
+}
+
+// Save the last LDR reading, and move pointer to next array index
+void Readings::ReadingLDR(int reading){
+    Readings::readingsLDR[Readings::nextLDRIndex] = reading;
+    
+    if (Readings::nextLDRIndex >= ((int)READING_LIST_SIZE - 1)){
+        Readings::nextLDRIndex = 0;
+    } else Readings::nextLDRIndex++;
+}
+
+// Calculate and return the mean of ultrasonic readings
+double Readings::GetUltrasonicMean(){
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum += (double)Readings::readingsUltrasonic[i];
+    }
+    
+    return sum / (double)READING_LIST_SIZE;;
+}
+
+// Calculate and return the mean of LDR readings
+double Readings::GetLDRMean(){
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum += (double)Readings::readingsLDR[i];
+    }
+    
+    return sum / (double)READING_LIST_SIZE;;
+}
+
+// Calculate and return the variance of ultrasonic readings
+double Readings::GetUltrasonicVariance(){
+    double varSum = 0.0, mean = Readings::GetUltrasonicMean();
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        varSum +=  pow(((double)Readings::readingsUltrasonic[i] - mean), 2);
+    }
+    
+    return varSum / (double)READING_LIST_SIZE;;
+}
+
+// Calculate and return the variance of LDR readings
+double Readings::GetLDRVariance(){
+    double varSum = 0.0, mean = Readings::GetLDRMean();
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        varSum +=  pow(((double)Readings::readingsLDR[i] - mean), 2);
+    }
+    
+    return varSum / (double)READING_LIST_SIZE;
+}    
+
+// Return the PIR reading
+bool Readings::GetPIRReading(){ return Readings::lastPIRReading; }
