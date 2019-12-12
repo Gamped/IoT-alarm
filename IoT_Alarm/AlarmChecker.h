@@ -6,17 +6,21 @@
 #define AlarmChecker_h
 
 #include "Arduino.h"
+#include "Readings.h"
+
+#define LENIANCE_ULTRA 5
+#define LENIANCE_LDR 10
 
 class AlarmChecker{
     private:
-        double CalculateChance(double result, 
-                               double my, 
-                               double sigma);
+        bool CheckUltrasonic(Readings *r, unsigned long reading);
+        bool CheckLDR(Readings *r, int reading);
     public:
         AlarmChecker();
-        char CheckForAlarm(bool pir, 
-                           unsigned long ultrasonic, 
-                           int ldr);
+        char CheckForAlarm(Readings *r, 
+                           unsigned long readingUltra,
+                           bool readingPIR,
+                           int readingLDR);
 };
 
 #endif
