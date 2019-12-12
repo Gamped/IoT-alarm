@@ -12,7 +12,6 @@ class AlarmChecker{
         double CalculateChance(double result, 
                                double my, 
                                double sigma);
-        double CalculateMean();
         double CalculateVariance();
     public:
         AlarmChecker();

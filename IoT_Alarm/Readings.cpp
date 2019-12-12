@@ -29,3 +29,28 @@ void Readings::ReadingLDR(int reading){
         Readings::nextLDRIndex = 0;
     } else Readings::nextLDRIndex++;
 }
+
+// Calculate and return the mean of ultrasonic readings
+double Readings::GetUltrasonicMean(){
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum += (double)Readings::readingsUltrasonic[i];
+    }
+    
+    return sum / (double)READING_LIST_SIZE;;
+}
+
+// Calculate and return the mean of LDR readings
+double Readings::GetLDRMean(){
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum += (double)Readings::readingsLDR[i];
+    }
+    
+    return sum / (double)READING_LIST_SIZE;;
+}
+
+// Return the PIR reading
+bool Readings::GetPIRReading(){ return Readings::lastPIRReading; }

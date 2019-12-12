@@ -58,13 +58,27 @@ void setup() {
     network.CheckAlarmMessageQueue();
     network.ResetMessageDelay();
     network.CheckAlarmMessageQueue();
+
+    // Test readings
+    readings.ReadingLDR(1);
+    readings.ReadingLDR(2);
+    readings.ReadingLDR(3);
+    readings.ReadingLDR(4);
+    readings.ReadingUltrasonic(1);
+    readings.ReadingUltrasonic(2);
+    readings.ReadingUltrasonic(3);
+    readings.ReadingUltrasonic(4);
+    readings.ReadingPIR(true);
+    Serial.println(readings.GetUltrasonicMean());
+    Serial.println(readings.GetLDRMean());
+    Serial.println(readings.GetPIRReading());    
 }
 
 /* ======== Loop ======== */
 void loop() {
     // Test for PIR
     alarmLight.SetLight(pir.Read());
-
+/*
     // Print data from other sensors
     Serial.println("======= LDR =======");
     Serial.println(ldr.Read());
@@ -75,7 +89,7 @@ void loop() {
 //    Serial.println(ReadRFID());
     Serial.println("======= TIME =======");
     time.PrintTimeTwoSecFormat(time.GetSystemTimeTwoSecFormat());
-
+*/
     delay(500);
 }
 

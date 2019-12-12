@@ -7,9 +7,9 @@
 
 #include "Arduino.h"
 
-#define READING_LIST_SIZE 15
+#define READING_LIST_SIZE 3
 
-// Class for interacting with the readings
+// Class for interacting with, and storing, the readings
 class Readings{
     private:
         bool lastPIRReading;
@@ -21,6 +21,9 @@ class Readings{
         void ReadingPIR(bool reading);
         void ReadingUltrasonic(unsigned long reading);
         void ReadingLDR(int reading);
+        double GetUltrasonicMean();
+        double GetLDRMean();
+        bool GetPIRReading();
 };
 
 #endif

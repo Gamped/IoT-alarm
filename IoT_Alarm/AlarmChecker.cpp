@@ -31,11 +31,6 @@ double AlarmChecker::CalculateChance(double result,
     return pow(base, exponent);
 }
 
-// Calculate the mean
-double AlarmChecker::CalculateMean(){
-
-}
-
 // Calculate the variance
 double AlarmChecker::CalculateVariance(){
 
