@@ -7,7 +7,7 @@
 // Constructor
 AlarmChecker::AlarmChecker(){ }
 
-// Check if there should be alarm, and if not add to readings
+// Check if there should be alarm and add to readings
 bool AlarmChecker::CheckUltrasonic(Readings *r, unsigned long reading){
     // If there is a reading
     if (reading != 0){
@@ -15,13 +15,15 @@ bool AlarmChecker::CheckUltrasonic(Readings *r, unsigned long reading){
         if (reading < (r->GetUltrasonicMean() - (r->GetUltrasonicVariance() + (int)LENIANCE_ULTRA))
             || reading > (r->GetUltrasonicMean() + (r->GetUltrasonicVariance() + (int)LENIANCE_ULTRA))){
             // Trigger alarm, as it is not a "normal" reading
+            r->AddReadingUltrasonic(reading);
             return true;
-        } else r->AddReadingUltrasonic(reading);
+        }
     }
+    r->AddReadingUltrasonic(reading);
     return false;
 }
 
-// Check if there should be alarm, and if not add to readings
+// Check if there should be alarm and add to readings
 bool AlarmChecker::CheckLDR(Readings *r, int reading){
     // If there is a reading
     if (reading != 0){
@@ -29,9 +31,11 @@ bool AlarmChecker::CheckLDR(Readings *r, int reading){
         if (reading < (r->GetLDRMean() - (r->GetLDRVariance() + (int)LENIANCE_LDR))
             || reading > (r->GetLDRMean() + (r->GetLDRVariance() + (int)LENIANCE_LDR))){
             // Trigger alarm, as it is not a "normal" reading
+            r->AddReadingLDR(reading);
             return true;
-        } else r->AddReadingLDR(reading);
+        }
     }
+    r->AddReadingLDR(reading);
     return false;
 }
 

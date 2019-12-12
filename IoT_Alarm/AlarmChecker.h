@@ -8,8 +8,8 @@
 #include "Arduino.h"
 #include "Readings.h"
 
-#define LENIANCE_ULTRA 5
-#define LENIANCE_LDR 10
+#define LENIANCE_ULTRA 10
+#define LENIANCE_LDR 30
 
 class AlarmChecker{
     private:

@@ -7,7 +7,7 @@
 
 #include "Arduino.h"
 
-#define READING_LIST_SIZE 20
+#define READING_LIST_SIZE 5
 
 // Class for interacting with, and storing, the readings
 class Readings{

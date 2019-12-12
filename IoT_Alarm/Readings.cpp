@@ -5,7 +5,7 @@
 #include "Readings.h"
 
 // Constructors
-Readings::Readings(){}
+Readings::Readings(){ }
 
 // Save the last ultrasonic reading, and move pointer to next array index
 void Readings::AddReadingUltrasonic(unsigned long reading){
