@@ -7,13 +7,8 @@
 // Constructors
 Readings::Readings(){}
 
-// Set the last PIR reading to reading
-void Readings::ReadingPIR(bool reading){
-    Readings::lastPIRReading = reading;
-}
-
 // Save the last ultrasonic reading, and move pointer to next array index
-void Readings::ReadingUltrasonic(unsigned long reading){
+void Readings::AddReadingUltrasonic(unsigned long reading){
     Readings::readingsUltrasonic[Readings::nextUltrasonicIndex] = reading;
     
     if (Readings::nextUltrasonicIndex >= ((int)READING_LIST_SIZE - 1)){
@@ -22,7 +17,7 @@ void Readings::ReadingUltrasonic(unsigned long reading){
 }
 
 // Save the last LDR reading, and move pointer to next array index
-void Readings::ReadingLDR(int reading){
+void Readings::AddReadingLDR(int reading){
     Readings::readingsLDR[Readings::nextLDRIndex] = reading;
     
     if (Readings::nextLDRIndex >= ((int)READING_LIST_SIZE - 1)){
@@ -72,7 +67,18 @@ double Readings::GetLDRVariance(){
     }
     
     return varSum / (double)READING_LIST_SIZE;
-}    
+}
 
-// Return the PIR reading
-bool Readings::GetPIRReading(){ return Readings::lastPIRReading; }
+// Return the last reading from Ultrasonic
+unsigned long Readings::GetLastUltrasonic(){
+    if (Readings::nextUltrasonicIndex == 0){
+        return Readings::readingsUltrasonic[(int)READING_LIST_SIZE - 1];
+    } else return Readings::readingsUltrasonic[Readings::nextUltrasonicIndex -1];
+}
+
+// Return the last 
+int Readings::GetLastLDR(){
+    if (Readings::nextLDRIndex == 0){
+        return Readings::readingsLDR[(int)READING_LIST_SIZE - 1];
+    } else return Readings::readingsLDR[Readings::nextLDRIndex -1];
+}   

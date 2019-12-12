@@ -40,59 +40,22 @@ void setup() {
     Serial.begin(9600);
     SPI.begin(); 
 //    mfrc522.PCD_Init(); 
-    
-    // Test network functions
-    network.AddMessageToQueue(network.MakeAlarmMessage('1', 1, 1, 1, '1'), 111);
-    network.AddMessageToQueue(network.MakeAlarmMessage('2', 2, 2, 2, '2'), 222);
-    network.AddMessageToQueue(network.MakeAlarmMessage('3', 3, 3, 3, '3'), 333);
-    network.AddMessageToQueue(network.MakeAlarmMessage('4', 4, 4, 4, '4'), 444);
-    network.CheckAlarmMessageQueue();
-    network.CheckAlarmMessageQueue();
-    network.ResetMessageDelay();
-    network.CheckAlarmMessageQueue();
-    network.CheckAlarmMessageQueue();
-    network.CheckAlarmMessageQueue();
-    network.ResetMessageDelay();
-    network.CheckAlarmMessageQueue();
-    network.ResetMessageDelay();
-    network.CheckAlarmMessageQueue();
-    network.ResetMessageDelay();
-    network.CheckAlarmMessageQueue();
-
-    // Test readings
-    readings.ReadingLDR(1);
-    readings.ReadingLDR(2);
-    readings.ReadingLDR(3);
-    readings.ReadingLDR(4);
-    readings.ReadingUltrasonic(1);
-    readings.ReadingUltrasonic(2);
-    readings.ReadingUltrasonic(3);
-    readings.ReadingUltrasonic(4);
-    readings.ReadingPIR(true);
-    Serial.println(readings.GetUltrasonicMean());
-    Serial.println(readings.GetLDRMean());
-    Serial.println(readings.GetPIRReading()); 
-    Serial.println(readings.GetLDRVariance());
-    Serial.println(readings.GetUltrasonicVariance());   
+    InitReadings();
 }
 
 /* ======== Loop ======== */
 void loop() {
-    // Test for PIR
-    alarmLight.SetLight(pir.Read());
-/*
-    // Print data from other sensors
-    Serial.println("======= LDR =======");
-    Serial.println(ldr.Read());
-    Serial.println("======= Ultrasonic ======="); 
-    Serial.println(ultrasonic.ReadMicroseconds());
-    Serial.println(ultrasonic.ReadCM());
-    Serial.println("======= RFID =======");
-//    Serial.println(ReadRFID());
-    Serial.println("======= TIME =======");
-    time.PrintTimeTwoSecFormat(time.GetSystemTimeTwoSecFormat());
-*/
-    delay(500);
+    char result = alarmChecker.CheckForAlarm(&readings,
+                               ultrasonic.ReadCM(),
+                               pir.Read(),
+                               ldr.Read());
+    if (result != 'A'){
+        Serial.println("___!ALARM!___");
+        Serial.println(result);
+        alarmLight.SetLight(true);
+    } else alarmLight.SetLight(false);
+    
+    delay(300);
 }
 
 /* ======== Non-class functions ======== */
@@ -100,3 +63,14 @@ void loop() {
 // Function that reads from the RFID card reader if an RFID card is present
 // TODO: Move to own class & verification method to only allow verified cards
 //bool ReadRFID(){ return mfrc522.PICC_IsNewCardPresent(); }
+
+// Function used to initialize values of readings
+void InitReadings(){
+    alarmLight.SetLight(true);
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        readings.AddReadingLDR(ldr.Read());
+        readings.AddReadingUltrasonic(ultrasonic.ReadCM());
+        delay(50);
+    }
+    alarmLight.SetLight(false);
+}
