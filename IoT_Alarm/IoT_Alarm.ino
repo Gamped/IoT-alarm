@@ -41,6 +41,7 @@ void setup() {
     SPI.begin(); 
 //    mfrc522.PCD_Init(); 
     InitReadings();
+    MeasureFunction(100);
 }
 
 /* ======== Loop ======== */
@@ -70,7 +71,27 @@ void InitReadings(){
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
         readings.AddReadingLDR(ldr.Read());
         readings.AddReadingUltrasonic(ultrasonic.ReadCM());
-        delay(50);
+        delay(200);
     }
     alarmLight.SetLight(false);
+}
+
+void MeasureFunction(int times){
+    unsigned long highestTime, startTime, time;
+
+    for (int i = 0; i < times; i++){
+        startTime = millis();
+
+        // Function to take time off:
+
+        // ========================
+
+        time = millis() - startTime;
+        if (time > highestTime){ highestTime = time; }
+        Serial.print(time);
+        Serial.print(",");
+    }
+    Serial.println("");
+    Serial.print("Worst time: ");
+    Serial.println(highestTime);
 }
