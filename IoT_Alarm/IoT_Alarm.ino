@@ -28,7 +28,7 @@ LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
 MFRC522 mfrc522(RFID_SDA, RFID_RST);
-AlarmTime time;
+AlarmTime alarmTime;
 Networking network;
 AlarmChecker alarmChecker;
 Readings readings;
@@ -67,7 +67,6 @@ void loop() {
 /* ======== Non-class functions ======== */
 
 // Function that reads from the RFID card reader if an RFID card is present
-// TODO: Move to own class & verification method to only allow verified cards
 bool ReadRFID(){ return mfrc522.PICC_IsNewCardPresent(); }
 
 // Function used to initialize values of readings
@@ -81,6 +80,7 @@ void InitReadings(){
     alarmLight.SetLight(false);
 }
 
+// Function used to measure worst case computation time of functions
 void MeasureFunction(int times){
     unsigned long highestTime = 0, startTime = 0, time = 0;
     unsigned long save[times];
@@ -89,8 +89,7 @@ void MeasureFunction(int times){
         startTime = millis();
 
         // Function to take time off:
-        network.CheckAlarmMessageQueue();
-        network.ResetMessageDelay();
+        alarmTime.GetSystemTimeTwoSecFormat();
         // ========================
 
         time = millis() - startTime;
