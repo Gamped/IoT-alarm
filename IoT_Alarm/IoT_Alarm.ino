@@ -3,7 +3,6 @@
 #include "LDR.h"
 #include "Ultrasonic.h"
 #include "AlarmLight.h"
-#include <SPI.h>
 #include <MFRC522.h>
 #include "AlarmTime.h"
 #include "Networking.h"
@@ -29,7 +28,6 @@ LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
 MFRC522 mfrc522(RFID_SDA, RFID_RST);
-byte readCard[4];
 AlarmTime time;
 Networking network;
 AlarmChecker alarmChecker;
