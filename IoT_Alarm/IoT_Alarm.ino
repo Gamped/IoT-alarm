@@ -4,7 +4,7 @@
 #include "Ultrasonic.h"
 #include "AlarmLight.h"
 #include <SPI.h>
-//#include <MFRC522.h>
+#include <MFRC522.h>
 #include "AlarmTime.h"
 #include "Networking.h"
 #include "AlarmChecker.h"
@@ -28,7 +28,7 @@ PIR pir(PIR_SIG);
 LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
-//MFRC522 mfrc522(RFID_SDA, RFID_RST);
+MFRC522 mfrc522(RFID_SDA, RFID_RST);
 byte readCard[4];
 AlarmTime time;
 Networking network;
@@ -39,7 +39,7 @@ Readings readings;
 void setup() {
     Serial.begin(9600);
     SPI.begin(); 
-//    mfrc522.PCD_Init(); 
+    mfrc522.PCD_Init(); 
     InitReadings();
     alarmLight.SetLight(true);
     delay(2000);
@@ -58,7 +58,7 @@ void loop() {
         Serial.println(result);
         alarmLight.SetLight(true);
     } else alarmLight.SetLight(false);
-    
+    ReadRFID();
     delay(300);
 }
 
@@ -66,7 +66,7 @@ void loop() {
 
 // Function that reads from the RFID card reader if an RFID card is present
 // TODO: Move to own class & verification method to only allow verified cards
-//bool ReadRFID(){ return mfrc522.PICC_IsNewCardPresent(); }
+bool ReadRFID(){ return mfrc522.PICC_IsNewCardPresent(); }
 
 // Function used to initialize values of readings
 void InitReadings(){
@@ -86,10 +86,7 @@ void MeasureFunction(int times){
         startTime = millis();
 
         // Function to take time off:
-            char result = alarmChecker.CheckForAlarm(&readings,
-                               1,
-                               1,
-                               1);
+            ReadRFID();
         // ========================
 
         time = millis() - startTime;
