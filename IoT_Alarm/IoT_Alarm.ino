@@ -44,7 +44,11 @@ void setup() {
     alarmLight.SetLight(true);
     delay(2000);
     alarmLight.SetLight(false);
-    MeasureFunction(100);
+    for (int i = 0; i < 75; i++){
+        network.AddMessageToQueue(network.MakeAlarmMessage('a', 1, 1, 1, '1'));
+    }
+    
+    MeasureFunction(75);
 }
 
 /* ======== Loop ======== */
@@ -81,17 +85,23 @@ void InitReadings(){
 
 void MeasureFunction(int times){
     unsigned long highestTime = 0, startTime = 0, time = 0;
+    unsigned long save[times];
 
     for (int i = 0; i < times; i++){
         startTime = millis();
 
         // Function to take time off:
-            ReadRFID();
+        network.CheckAlarmMessageQueue();
+        network.ResetMessageDelay();
         // ========================
 
         time = millis() - startTime;
         if (time > highestTime){ highestTime = time; }
-        Serial.print(time);
+        save[i] = time;
+    }
+
+    for (unsigned long i: save){
+        Serial.print(i);
         Serial.print(",");
     }
     Serial.println("");
