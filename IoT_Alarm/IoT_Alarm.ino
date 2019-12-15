@@ -34,9 +34,9 @@ Networking network;
 AlarmChecker alarmChecker;
 Readings readings;
 bool readingPIR, interruptWait = false;
-unsigned long readingUltrasonic , t1, t2;
+unsigned long readingUltrasonic;
 int readingLDR;
-char alarmResult;
+char alarmType;
 
 /* ======== Setup ======== */
 void setup() {
@@ -51,13 +51,39 @@ void setup() {
 
 /* ======== Loop ======== */
 void loop() {
-    t1 = millis();
-    Serial.println(t1 - t2);
-    alarmLight.SetLight(true);
+    // First minor cycle
+    readingPIR = pir.Read();
+    readingLDR = ldr.Read();
+    readingUltrasonic = ultrasonic.ReadCM();
+    alarmType = alarmChecker.CheckForAlarm(&readings,
+                                           readingUltrasonic,
+                                           readingPIR,
+                                           readingLDR);
+    if (alarmType != 'A'){
+        network.AddMessageToQueue(network.MakeAlarmMessage(alarmType,
+                                                           alarmTime.GetSystemTimeTwoSecFormat(),
+                                                           readingLDR,
+                                                           readingUltrasonic,
+                                                           (char)readingPIR));
+    }
     WaitForInterrupt();
-    t2 = millis();
-    Serial.println(t2 - t1);
-    alarmLight.SetLight(false);
+
+    // Second minor cycle
+    readingPIR = pir.Read();
+    readingLDR = ldr.Read();
+    network.CheckAlarmMessageQueue();
+    ReadRFID();
+    alarmType = alarmChecker.CheckForAlarm(&readings,
+                                           readingUltrasonic,
+                                           readingPIR,
+                                           readingLDR);
+    if (alarmType != 'A'){
+        network.AddMessageToQueue(network.MakeAlarmMessage(alarmType,
+                                                           alarmTime.GetSystemTimeTwoSecFormat(),
+                                                           readingLDR,
+                                                           readingUltrasonic,
+                                                           (char)readingPIR));
+    }
     WaitForInterrupt();
 }
 
@@ -68,6 +94,11 @@ void ReadRFID(){
     if (rfid.PICC_IsNewCardPresent()){
         // If it's present then reset time before next alarm can be sent
         network.ResetMessageDelay();
+
+        // Blink to quickly indicate read
+        alarmLight.SetLight(true);
+        delayMicroseconds(250);
+        alarmLight.SetLight(false);
     }
 }
 
@@ -87,7 +118,6 @@ void InterruptCalled(){ interruptWait = false; }
 
 // Function used to wait for next interrupt to happen
 void WaitForInterrupt(){
-    Serial.println("Kage?");
     interruptWait = true;
     // Just keep "busy wait" with check
     // And make sure not interrupted during check

@@ -89,12 +89,12 @@ t&lt;=T</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
-PrPIR = TASK(1,75,1);
+PrPIR = TASK(1,150,1);
 PrUltra = TASK(2,300,127);
 PrLDR = TASK(3,150,1);
 PrRFID = TASK(4,300,28);
-PrCheckAlarm = TASK(5,75,2);
-PrAddAlarm = TASK(6,75,1);
+PrCheckAlarm = TASK(5,150,2);
+PrAddAlarm = TASK(6,150,1);
 PrSendAlarm = TASK(7,150,57);
 
 // List one or more processes to be composed into a system.
