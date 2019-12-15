@@ -1,4 +1,4 @@
-/*
+ /*
     Code file for checking if an alarm should be triggered
 */
 #include "Arduino.h"
@@ -14,8 +14,8 @@ bool AlarmChecker::CheckUltrasonic(Readings *r, unsigned long reading){
         // See if an alarm should be triggerd
         if (reading < (r->GetUltrasonicMean() - ((r->GetUltrasonicVariance() / 2) + (int)LENIANCE_ULTRA))
             || reading > (r->GetUltrasonicMean() + ((r->GetUltrasonicVariance() / 2) + (int)LENIANCE_ULTRA))){
-            // Trigger alarm, as it is not a "normal" reading
             r->AddReadingUltrasonic(reading);
+            // Trigger alarm, as it is not a "normal" reading
             return true;
         }
     }
@@ -30,8 +30,8 @@ bool AlarmChecker::CheckLDR(Readings *r, int reading){
         // See if an alarm should be triggerd
         if (reading < (r->GetLDRMean() - ((r->GetLDRVariance() / 2) + (int)LENIANCE_LDR))
             || reading > (r->GetLDRMean() + ((r->GetLDRVariance() / 2) + (int)LENIANCE_LDR))){
-            // Trigger alarm, as it is not a "normal" reading
             r->AddReadingLDR(reading);
+            // Trigger alarm, as it is not a "normal" reading            
             return true;
         }
     }

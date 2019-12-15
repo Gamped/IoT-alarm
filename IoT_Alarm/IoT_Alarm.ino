@@ -27,11 +27,15 @@ PIR pir(PIR_SIG);
 LDR ldr(LDR_SIG);
 Ultrasonic ultrasonic(ULTRASONIC_ECHO, ULTRASONIC_TRIG);
 AlarmLight alarmLight(LED_RED);
-MFRC522 mfrc522(RFID_SDA, RFID_RST);
+MFRC522 rfid(RFID_SDA, RFID_RST);
 AlarmTime alarmTime;
 Networking network;
 AlarmChecker alarmChecker;
 Readings readings;
+bool readingPIR;
+unsigned long readingUltrasonic;
+int readingLDR;
+char alarmResult;
 
 /* ======== Setup ======== */
 void setup() {
@@ -39,35 +43,42 @@ void setup() {
     SPI.begin(); 
     mfrc522.PCD_Init(); 
     InitReadings();
-    alarmLight.SetLight(true);
-    delay(2000);
-    alarmLight.SetLight(false);
-    for (int i = 0; i < 75; i++){
-        network.AddMessageToQueue(network.MakeAlarmMessage('a', 1, 1, 1, '1'));
-    }
-    
-    MeasureFunction(75);
 }
 
 /* ======== Loop ======== */
 void loop() {
-    char result = alarmChecker.CheckForAlarm(&readings,
-                               ultrasonic.ReadCM(),
-                               pir.Read(),
-                               ldr.Read());
-    if (result != 'A'){
-        Serial.println("___!ALARM!___");
-        Serial.println(result);
-        alarmLight.SetLight(true);
-    } else alarmLight.SetLight(false);
+    // Make readings
+    readingPIR = pir.Read();
+    readingUltrasonic = ultrasonic.ReadCM();
+    readingLDR = ldr.Read();
+    // Check for alarm
+    alarmResult = alarmChecker.CheckForAlarm(&readings, 
+                                             readingUltrasonic, 
+                                             readingPIR, 
+                                             readingLDR);
+    // If alarm then add to queue
+    if (alarmResult != 'A'){
+        network.AddMessageToQueue(network.MakeAlarmMessage(alarmResult, 
+                                                           alarmTime.GetSystemTimeTwoSecFormat(), 
+                                                           readingLDR, 
+                                                           readingUltrasonic, 
+                                                           (char)readingPIR));
+    }
+    // See if we are alowed to send message
+    network.CheckAlarmMessageQueue();
+    // Read RFID card
     ReadRFID();
-    delay(300);
 }
 
 /* ======== Non-class functions ======== */
 
 // Function that reads from the RFID card reader if an RFID card is present
-bool ReadRFID(){ return mfrc522.PICC_IsNewCardPresent(); }
+void ReadRFID(){ 
+    if (rfid.PICC_IsNewCardPresent()){
+        // If it's present then reset time before next alarm can be sent
+        network.ResetMessageDelay();
+    }
+}
 
 // Function used to initialize values of readings
 void InitReadings(){
@@ -75,7 +86,7 @@ void InitReadings(){
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
         readings.AddReadingLDR(ldr.Read());
         readings.AddReadingUltrasonic(ultrasonic.ReadCM());
-        delay(200);
+        delay(250);
     }
     alarmLight.SetLight(false);
 }
@@ -89,7 +100,7 @@ void MeasureFunction(int times){
         startTime = millis();
 
         // Function to take time off:
-        alarmTime.GetSystemTimeTwoSecFormat();
+
         // ========================
 
         time = millis() - startTime;
