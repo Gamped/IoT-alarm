@@ -46,7 +46,7 @@ void Networking::CheckAlarmMessageQueue(){
 void Networking::ResetMessageDelay(){ Networking::lastMessageSent = 0; }
 
 // Adds a message to the message queue
-void Networking::AddMessageToQueue(AlarmMessage msg, int ID){                            
+void Networking::AddMessageToQueue(AlarmMessage msg){                            
     if (!Networking::messageQueue.containsData){
         Networking::messageQueue.data = msg;
         Networking::messageQueue.containsData = true;

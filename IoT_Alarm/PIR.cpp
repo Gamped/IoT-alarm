@@ -11,4 +11,11 @@ PIR::PIR(int pin){
 }
 
 // Reads the PIR and returns if it's been triggered
-bool PIR::Read(){ return digitalRead(PIR::pirPin); }
+bool PIR::Read(){ 
+  bool result = false;
+  if (PIR::lastReadingTime == 0 || (millis() - PIR::lastReadingTime) >= (unsigned long)PIR_READING_DELAY_MS){
+    result = digitalRead(PIR::pirPin);
+    if (result) { PIR::lastReadingTime = millis(); }
+    return result;
+  } return false; 
+}

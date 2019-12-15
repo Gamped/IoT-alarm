@@ -9,8 +9,7 @@
 
 class Ultrasonic{
     private:
-        int ultrasonicEchoPin;
-        int ultrasonicTrigPin;
+        int ultrasonicEchoPin, ultrasonicTrigPin;
         unsigned long ConvertToCM(unsigned long microseconds);
     public:
         Ultrasonic(int echoPin, int trigPin);
