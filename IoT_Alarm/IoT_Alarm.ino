@@ -8,6 +8,7 @@
 #include "Networking.h"
 #include "AlarmChecker.h"
 #include "Readings.h"
+#include <TimerOne.h>
 
 /* ======== Define pins ======== */
 #define ULTRASONIC_ECHO 2
@@ -32,8 +33,8 @@ AlarmTime alarmTime;
 Networking network;
 AlarmChecker alarmChecker;
 Readings readings;
-bool readingPIR;
-unsigned long readingUltrasonic;
+bool readingPIR, interruptWait = false;
+unsigned long readingUltrasonic , t1, t2;
 int readingLDR;
 char alarmResult;
 
@@ -41,33 +42,23 @@ char alarmResult;
 void setup() {
     Serial.begin(9600);
     SPI.begin(); 
-    mfrc522.PCD_Init(); 
+    rfid.PCD_Init(); 
     InitReadings();
+    // Set timer to every 150ms and associate function to allow to run
+    Timer1.initialize(150000);
+    Timer1.attachInterrupt(InterruptCalled);
 }
 
 /* ======== Loop ======== */
 void loop() {
-    // Make readings
-    readingPIR = pir.Read();
-    readingUltrasonic = ultrasonic.ReadCM();
-    readingLDR = ldr.Read();
-    // Check for alarm
-    alarmResult = alarmChecker.CheckForAlarm(&readings, 
-                                             readingUltrasonic, 
-                                             readingPIR, 
-                                             readingLDR);
-    // If alarm then add to queue
-    if (alarmResult != 'A'){
-        network.AddMessageToQueue(network.MakeAlarmMessage(alarmResult, 
-                                                           alarmTime.GetSystemTimeTwoSecFormat(), 
-                                                           readingLDR, 
-                                                           readingUltrasonic, 
-                                                           (char)readingPIR));
-    }
-    // See if we are alowed to send message
-    network.CheckAlarmMessageQueue();
-    // Read RFID card
-    ReadRFID();
+    t1 = millis();
+    Serial.println(t1 - t2);
+    alarmLight.SetLight(true);
+    WaitForInterrupt();
+    t2 = millis();
+    Serial.println(t2 - t1);
+    alarmLight.SetLight(false);
+    WaitForInterrupt();
 }
 
 /* ======== Non-class functions ======== */
@@ -89,6 +80,26 @@ void InitReadings(){
         delay(250);
     }
     alarmLight.SetLight(false);
+}
+
+// Function called by interrupt timer to set interruptWait
+void InterruptCalled(){ interruptWait = false; }
+
+// Function used to wait for next interrupt to happen
+void WaitForInterrupt(){
+    Serial.println("Kage?");
+    interruptWait = true;
+    // Just keep "busy wait" with check
+    // And make sure not interrupted during check
+    for (;;){
+        cli();
+        if (interruptWait == false){
+            sei(); 
+            return; 
+        }
+        sei();
+        delayMicroseconds(1);
+    }
 }
 
 // Function used to measure worst case computation time of functions
