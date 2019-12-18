@@ -7,73 +7,24 @@
 // Constructors
 Readings::Readings(){ }
 
-// Save the last ultrasonic reading, and move pointer to next array index
-void Readings::AddReadingUltrasonic(unsigned long reading){
-    Readings::readingsUltrasonic[Readings::nextUltrasonicIndex] = reading;
-    
-    if (Readings::nextUltrasonicIndex >= ((int)READING_LIST_SIZE - 1)){
-        Readings::nextUltrasonicIndex = 0;
-    } else Readings::nextUltrasonicIndex++;
+// Get the ultrasonic readings array
+unsigned long* Readings::GetUltrasonicReadings(){
+    return Readings::readingsUltrasonic;
 }
 
-// Save the last LDR reading, and move pointer to next array index
-void Readings::AddReadingLDR(int reading){
-    Readings::readingsLDR[Readings::nextLDRIndex] = reading;
-    
-    if (Readings::nextLDRIndex >= ((int)READING_LIST_SIZE - 1)){
-        Readings::nextLDRIndex = 0;
-    } else Readings::nextLDRIndex++;
-}
+// Get the LDR readings array
+int* Readings::GetLDRReadings(){ return Readings::readingsLDR; }
 
-// Calculate and return the mean of ultrasonic readings
-double Readings::GetUltrasonicMean(){
-    double sum = 0.0;
+// Add a reading to a reading array
+template <class T>
+void Readings::AddReading(T reading, 
+                          T toReadingsList[], 
+                          int* nextIndex){
+    toReadingsList[*nextIndex] = reading;
 
-    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum += (double)Readings::readingsUltrasonic[i];
-    }
-    
-    return sum / (double)READING_LIST_SIZE;;
-}
-
-// Calculate and return the mean of LDR readings
-double Readings::GetLDRMean(){
-    double sum = 0.0;
-
-    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum += (double)Readings::readingsLDR[i];
-    }
-    
-    return sqrt(sum / (double)READING_LIST_SIZE);
-}
-
-// Calculate and return the variance of ultrasonic readings
-double Readings::GetUltrasonicStdDeviation(){
-    double sum = 0.0, mean = Readings::GetUltrasonicMean();
-
-    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum +=  pow(((double)Readings::readingsUltrasonic[i] - mean), 2);
-    }
-    
-    return sqrt(sum / (double)READING_LIST_SIZE);
-}
-
-// Calculate and return the variance of LDR readings
-double Readings::GetLDRStdDeviation(){
-    double sum = 0.0, mean = Readings::GetLDRMean();
-
-    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum +=  pow(((double)Readings::readingsLDR[i] - mean), 2);
-    }
-    
-    return sum / (double)READING_LIST_SIZE;
-}
-
-// Return the last reading from Ultrasonic
-unsigned long Readings::GetLastUltrasonic(){
-    if (Readings::nextUltrasonicIndex == 0){
-        return Readings::readingsUltrasonic[(int)READING_LIST_SIZE - 1];
-    } else return Readings::readingsUltrasonic[Readings::nextUltrasonicIndex -1];
+    if (*nextIndex  >= ((int)READING_LIST_SIZE - 1)){
+        *nextIndex = 0;
+    } else (*nextIndex)++;                   
 }
 
 // Return the last 
@@ -81,4 +32,36 @@ int Readings::GetLastLDR(){
     if (Readings::nextLDRIndex == 0){
         return Readings::readingsLDR[(int)READING_LIST_SIZE - 1];
     } else return Readings::readingsLDR[Readings::nextLDRIndex -1];
-}   
+} 
+
+// Get the last reading added to readingArray
+template <class T>
+T GetLastAdded(T fromArray[], int nextIndex){
+    if (nextIndex == 0){
+        return fromArray[(int)READING_LIST_SIZE - 1];
+    } else return fromArray[nextIndex - 1];
+}
+
+// Calculate and return the mean of a readings array 
+template <class T>
+double Readings::GetMean(T readingsList[]){
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum += (double)readingsList[i];
+    }
+    
+    return sum / (double)READING_LIST_SIZE;
+}
+
+// Calculate and return the standard deviation of a readings array
+template <class T>
+double GetStdDeviation(T readingsList[], double mean);
+    double sum = 0.0;
+
+    for (int i = 0; i < (int)READING_LIST_SIZE; i++){
+        sum +=  pow(((double)readingsList[i] - mean), 2);
+    }
+    
+    return sqrt(sum / (double)READING_LIST_SIZE);
+}
