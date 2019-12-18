@@ -51,7 +51,7 @@ double ReadingElement<T>::GetMean(){
     double sum = 0.0;
 
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum += (double)readingList[i];
+        sum += (double)ReadingElement<T>::readingList[i];
     }
     
     return sum / (double)READING_LIST_SIZE;
@@ -63,7 +63,7 @@ double ReadingElement<T>::GetStdDeviation(){
     double sum = 0.0, mean = ReadingElement<T>::GetMean();
 
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum +=  pow(((double)readingList[i] - mean), 2);
+        sum +=  pow(((double)ReadingElement<T>::readingList[i] - mean), 2);
     }
     
     return sqrt(sum / (double)READING_LIST_SIZE);
