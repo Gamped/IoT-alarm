@@ -82,6 +82,13 @@ void Networking::PrivateAddToQueue(AlarmMessage msg){
     Networking::msgAmount++;
 }
 
+// Removes all indexes from the message queue
+void Networking::RemoveAllFromQueue(){
+    while (Networking::messageQueue.containsData){
+        Networking::RemoveFirstIndex();
+    }
+}
+
 // Make new alarm message
 AlarmMessage Networking::MakeAlarmMessage(char type, 
                                           short timeStamp, 
