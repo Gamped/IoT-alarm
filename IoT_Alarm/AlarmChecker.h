@@ -10,7 +10,7 @@
 #include "ReadingElement.h"
 
 #define LENIANCE_ULTRA 10
-#define LENIANCE_LDR 25
+#define LENIANCE_LDR 35
 
 class AlarmChecker{
     private:
@@ -38,7 +38,7 @@ bool AlarmChecker::CheckIfAlarm(ReadingElement<T> *r, T reading, double leniance
         double mean, sigmaAndLeniance;
         
         // Calculate only once
-        sigmaAndLeniance = (r->GetStdDeviation() / 2) + leniance;
+        sigmaAndLeniance = (r->GetStdDeviation()* 3) + leniance;
         mean = r->GetMean();
 
         // Check if more or less

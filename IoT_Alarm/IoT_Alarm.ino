@@ -68,6 +68,7 @@ void loop() {
                                                            readingUltrasonic,
                                                            (char)readingPIR));
     }
+    readingUltrasonic = 0; // As not used in next minor cycle
 
     // Second minor cycle
     WaitForInterrupt();
