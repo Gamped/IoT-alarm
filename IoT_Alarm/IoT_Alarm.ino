@@ -42,7 +42,8 @@ char alarmType;
 void setup() {
     Serial.begin(9600);
     SPI.begin(); 
-    rfid.PCD_Init(); 
+    rfid.PCD_Init();
+    // Get intial measurements for Ultrasonic and LDR 
     InitReadings();
     // Set timer to every 150ms and associate function to allow to run
     Timer1.initialize(150000);
@@ -52,6 +53,7 @@ void setup() {
 /* ======== Loop ======== */
 void loop() {
     // First minor cycle
+    WaitForInterrupt();
     readingPIR = pir.Read();
     readingLDR = ldr.Read();
     readingUltrasonic = ultrasonic.ReadCM();
@@ -66,9 +68,10 @@ void loop() {
                                                            readingUltrasonic,
                                                            (char)readingPIR));
     }
-    WaitForInterrupt();
+    readingUltrasonic = 0; // As not used in next minor cycle
 
     // Second minor cycle
+    WaitForInterrupt();
     readingPIR = pir.Read();
     readingLDR = ldr.Read();
     network.CheckAlarmMessageQueue();
@@ -84,7 +87,6 @@ void loop() {
                                                            readingUltrasonic,
                                                            (char)readingPIR));
     }
-    WaitForInterrupt();
 }
 
 /* ======== Non-class functions ======== */
@@ -106,8 +108,8 @@ void ReadRFID(){
 void InitReadings(){
     alarmLight.SetLight(true);
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        readings.AddReadingLDR(ldr.Read());
-        readings.AddReadingUltrasonic(ultrasonic.ReadCM());
+        readings.readingsLDR.AddReading(ldr.Read());
+        readings.readingsUltrasonic.AddReading(ultrasonic.ReadCM());
         delay(250);
     }
     alarmLight.SetLight(false);

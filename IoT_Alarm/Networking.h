@@ -7,6 +7,11 @@
 
 #include "Arduino.h"
 
+// Maximum store 4 hours worth of messages (on sigfox network) to not overflow (total 288 byte)
+#define MAX_MSG 24
+// By default wait 10 min between sending msg, to live up to sigfox limit
+#define MS_BETWEEN_MSG 600000
+
 // Container class for an alarm message
 class AlarmMessage {
     public:
@@ -14,7 +19,7 @@ class AlarmMessage {
         short timeStamp;
         long valueLDR;
         long valueUltrasonic;
-        char bitmap; 
+        bool valuePIR; 
 };
 
 // Queue for alarm messages
@@ -32,6 +37,9 @@ class Networking{
         AlarmMessageQueue messageQueue;
         unsigned long lastMessageSent;
         void SendAlarmMessage(AlarmMessage msg);
+        int msgAmount = 0;
+        void PrivateAddToQueue(AlarmMessage msg);
+        void RemoveFirstIndex();
     public:
         Networking();
         void CheckAlarmMessageQueue();
@@ -41,7 +49,7 @@ class Networking{
                                       short timeStamp, 
                                       long valueLDR, 
                                       long valueUltrasonic, 
-                                      char bitmap);
+                                      bool valuePIR);
 };
 
 #endif
