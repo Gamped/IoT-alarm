@@ -97,7 +97,7 @@ void ReadRFID(){
         // If it's present then reset time before next alarm can be sent
         network.ResetMessageDelay();
 
-        // Blink to quickly indicate read
+        // Blink to quickly indicate card has been read
         alarmLight.SetLight(true);
         delayMicroseconds(250);
         alarmLight.SetLight(false);
@@ -110,7 +110,7 @@ void InitReadings(){
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
         readings.readingsLDR.AddReading(ldr.Read());
         readings.readingsUltrasonic.AddReading(ultrasonic.ReadCM());
-        delay(250);
+        delay(300);
     }
     alarmLight.SetLight(false);
 }

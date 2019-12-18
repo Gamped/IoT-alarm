@@ -9,7 +9,6 @@ AlarmChecker::AlarmChecker(){ }
 
 // Check if an alarm has happened
 // Returns alarm type OR 'A' for no alarm
-// Note: Please refer to "Type of alarm" section in report for alarm-type-table
 char AlarmChecker::CheckForAlarm(Readings *r, 
                                  unsigned long readingUltra,
                                  bool readingPIR,
@@ -22,20 +21,20 @@ char AlarmChecker::CheckForAlarm(Readings *r,
 
     // Figure out if there is an alarm
     if (!resultLDR && !readingUltra && !readingPIR){
-        return 'A';
+        return 'A'; // No alarm
     } else if (!resultLDR && !resultUltra && readingPIR){
-        return '0';
-    } else if (!resultLDR && !resultUltra && readingPIR){
-        return '1';
+        return '0'; // PIR triggered
+    } else if (resultLDR && !resultUltra && readingPIR){
+        return '1'; // PIR and LDR triggered
     } else if (!resultLDR && resultUltra && readingPIR){
-        return '2';
+        return '2'; // PIR and Ultrasonic triggered
     } else if (resultLDR && resultUltra && readingPIR){
-        return '3';
+        return '3'; // PIR, LDR and Ultrasonic triggered
     } else if (resultLDR && resultUltra && !readingPIR){
-        return '4';
+        return '4'; // LDR and Ultrasonic triggered
     } else if (resultLDR && !resultUltra && !readingPIR){
-        return '5';
+        return '5'; // LDR triggered
     } else if (!resultLDR && resultUltra && !readingPIR){
-        return '6';
+        return '6'; // Ultrasonic triggered
     } else return 'A';
 }
