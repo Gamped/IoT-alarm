@@ -5,8 +5,8 @@
 #include "AlarmTime.h"
 
 #define DAY_TWO_SEC_COUNT 43200
-#define MINUTE_TWO_SEC 30
 #define HOUR_TWO_SEC 1800
+#define MINUTE_TWO_SEC 30
 #define MILLIS_TO_TWO_SEC 2000
 
 // Constructor

@@ -28,7 +28,6 @@ void Networking::CheckAlarmMessageQueue(){
 
             // Set time for last message sent and reduce amount stored
             Networking::lastMessageSent = millis();
-            Networking::msgAmount--;
         }
     }
 }
@@ -41,7 +40,6 @@ void Networking::AddMessageToQueue(AlarmMessage msg){
     // Verfiy it will not go over max limit
     if (Networking::msgAmount < (int)MAX_MSG){
         Networking::PrivateAddToQueue(msg);
-        Networking::msgAmount++;
     } else { // ...remove oldest message and add this
         Networking::RemoveFirstIndex();
         Networking::PrivateAddToQueue(msg);
@@ -57,29 +55,31 @@ void Networking::RemoveFirstIndex(){
         // Just allow overwrite of its data, as it is the first element
         Networking::messageQueue.containsData = false;
     }
+    Networking::msgAmount--;
 }
 
 // Function used to add to queue, but private as checks needs to be done in public
 void Networking::PrivateAddToQueue(AlarmMessage msg){
     if (!Networking::messageQueue.containsData){
-            Networking::messageQueue.data = msg;
-            Networking::messageQueue.containsData = true;
-        } else {
-            AlarmMessageQueue *current; 
-            current = &(Networking::messageQueue);
-            bool keepScrolling = true;
+        Networking::messageQueue.data = msg;
+        Networking::messageQueue.containsData = true;
+    } else {
+        AlarmMessageQueue *current; 
+        current = &(Networking::messageQueue);
+        bool keepScrolling = true;
 
-            // Scroll through queue to find end
-            while (keepScrolling){
-                if (current->hasEntryBehindInQueue){
-                    current = current->next;
-                } else keepScrolling = false;
-            }
-            current->next = new AlarmMessageQueue;
-            current->next->data = msg;
-            current->next->containsData = true;
-            current->hasEntryBehindInQueue = true; 
+        // Scroll through queue to find end
+        while (keepScrolling){
+            if (current->hasEntryBehindInQueue){
+                current = current->next;
+            } else keepScrolling = false;
         }
+        current->next = new AlarmMessageQueue;
+        current->next->data = msg;
+        current->next->containsData = true;
+        current->hasEntryBehindInQueue = true; 
+    }
+    Networking::msgAmount++;
 }
 
 // Make new alarm message
