@@ -107,8 +107,8 @@ void ReadRFID(){
 void InitReadings(){
     alarmLight.SetLight(true);
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        readings.AddReadingLDR(ldr.Read());
-        readings.AddReadingUltrasonic(ultrasonic.ReadCM());
+        readings.readingsLDR.AddReading(ldr.Read());
+        readings.readingsUltrasonic.AddReading(ultrasonic.ReadCM());
         delay(250);
     }
     alarmLight.SetLight(false);
