@@ -45,6 +45,7 @@ class Networking{
         void CheckAlarmMessageQueue();
         void ResetMessageDelay();
         void AddMessageToQueue(AlarmMessage msg);
+        void RemoveAllFromQueue();
         AlarmMessage MakeAlarmMessage(char type, 
                                       short timeStamp, 
                                       long valueLDR, 

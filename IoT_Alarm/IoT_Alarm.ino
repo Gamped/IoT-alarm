@@ -94,8 +94,10 @@ void loop() {
 // Function that reads from the RFID card reader if an RFID card is present
 void ReadRFID(){ 
     if (rfid.PICC_IsNewCardPresent()){
-        // If it's present then reset time before next alarm can be sent
+        // Reset time before next alarm can be sent
         network.ResetMessageDelay();
+        // Remove message queue, as a guard has checked up on the area
+        network.RemoveAllFromQueue();
 
         // Blink to quickly indicate card has been read
         alarmLight.SetLight(true);
