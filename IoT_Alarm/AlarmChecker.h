@@ -38,7 +38,7 @@ bool AlarmChecker::CheckIfAlarm(ReadingElement<T> *r, T reading, double leniance
         double mean, sigmaAndLeniance;
         
         // Calculate only once
-        sigmaAndLeniance = (r->GetStdDeviation()* 3) + leniance;
+        sigmaAndLeniance = (r->GetStdDeviation()* 2) + leniance;
         mean = r->GetMean();
 
         // Check if more or less
