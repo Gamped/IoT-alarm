@@ -16,7 +16,7 @@ void Networking::SendAlarmMessage(AlarmMessage msg){
     Serial.println(msg.timeStamp);
     Serial.println(msg.valueLDR);
     Serial.println(msg.valueUltrasonic);
-    Serial.println(msg.bitmap);
+    Serial.println(msg.valuePIR);
     Serial.println("=== !ALARM! ===");
 }
 
@@ -73,14 +73,14 @@ AlarmMessage Networking::MakeAlarmMessage(char type,
                                           short timeStamp, 
                                           long valueLDR, 
                                           long valueUltrasonic, 
-                                          char bitmap){
+                                          bool valuePIR){
     AlarmMessage msg;
     
     msg.type = type;
     msg.timeStamp = timeStamp;
     msg.valueLDR = valueLDR;
     msg.valueUltrasonic = valueUltrasonic;
-    msg.bitmap = bitmap;
+    msg.valuePIR = valuePIR;
 
     return msg;
 }

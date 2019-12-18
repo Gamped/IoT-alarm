@@ -17,5 +17,5 @@ bool PIR::Read(){
     result = digitalRead(PIR::pirPin);
     if (result) { PIR::lastReadingTime = millis(); }
     return result;
-  } return false; 
+  } else return false; 
 }

@@ -44,22 +44,22 @@ double Readings::GetLDRMean(){
         sum += (double)Readings::readingsLDR[i];
     }
     
-    return sum / (double)READING_LIST_SIZE;;
+    return sqrt(sum / (double)READING_LIST_SIZE);
 }
 
 // Calculate and return the variance of ultrasonic readings
-double Readings::GetUltrasonicVariance(){
+double Readings::GetUltrasonicStdDeviation(){
     double varSum = 0.0, mean = Readings::GetUltrasonicMean();
 
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
         varSum +=  pow(((double)Readings::readingsUltrasonic[i] - mean), 2);
     }
     
-    return varSum / (double)READING_LIST_SIZE;;
+    return sqrt(varSum / (double)READING_LIST_SIZE);
 }
 
 // Calculate and return the variance of LDR readings
-double Readings::GetLDRVariance(){
+double Readings::GetLDRStdDeviation(){
     double varSum = 0.0, mean = Readings::GetLDRMean();
 
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){

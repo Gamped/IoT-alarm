@@ -21,8 +21,8 @@ class Readings{
         void AddReadingLDR(int reading);
         double GetUltrasonicMean();
         double GetLDRMean();
-        double GetUltrasonicVariance();
-        double GetLDRVariance();
+        double GetUltrasonicStdDeviation();
+        double GetLDRStdDeviation();
         unsigned long GetLastUltrasonic();
         int GetLastLDR();        
 };

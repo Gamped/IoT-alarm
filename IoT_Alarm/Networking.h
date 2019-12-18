@@ -14,7 +14,7 @@ class AlarmMessage {
         short timeStamp;
         long valueLDR;
         long valueUltrasonic;
-        char bitmap; 
+        bool valuePIR; 
 };
 
 // Queue for alarm messages
@@ -41,7 +41,7 @@ class Networking{
                                       short timeStamp, 
                                       long valueLDR, 
                                       long valueUltrasonic, 
-                                      char bitmap);
+                                      bool valuePIR);
 };
 
 #endif
