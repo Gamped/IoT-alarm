@@ -32,7 +32,7 @@ template <class T>
 void ReadingElement<T>::AddReading(T reading){
     readingList[nextIndex] = reading;
 
-    if (nextIndex  >= ((int)READING_LIST_SIZE - 1)){
+    if (nextIndex >= ((int)READING_LIST_SIZE - 1)){
         nextIndex = 0;
     } else nextIndex++;                   
 }
@@ -63,7 +63,7 @@ double ReadingElement<T>::GetStdDeviation(){
     double sum = 0.0, mean = ReadingElement<T>::GetMean();
 
     for (int i = 0; i < (int)READING_LIST_SIZE; i++){
-        sum +=  pow(((double)ReadingElement<T>::readingList[i] - mean), 2);
+        sum += pow(((double)ReadingElement<T>::readingList[i] - mean), 2);
     }
     
     return sqrt(sum / (double)READING_LIST_SIZE);
