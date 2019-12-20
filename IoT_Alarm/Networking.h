@@ -7,36 +7,50 @@
 
 #include "Arduino.h"
 
-// Custom structure for an alarm message
-typedef struct alarmMessage {
-  char type;
-  short timeStamp;
-  long valueLDR;
-  long valueUltrasonic;
-  char bitmap; 
-} alarmMessage_t;
+// Maximum store 4 hours worth of messages (on sigfox network) to not overflow (total 288 byte)
+#define MAX_MSG 24
+// By default wait 10 min between sending msg, to live up to sigfox limit
+#define MS_BETWEEN_MSG 600000
+
+// Container class for an alarm message
+class AlarmMessage {
+    public:
+        char type;
+        short timeStamp;
+        long valueLDR;
+        long valueUltrasonic;
+        bool valuePIR; 
+};
 
 // Queue for alarm messages
-typedef struct alarmMessageQueue {
-  alarmMessage_t data;
-  struct alarmMessageQueue *next;
-} alarmMessageQueue_t;
+class AlarmMessageQueue {
+    public:
+        AlarmMessage data;
+        bool containsData = false; 
+        bool hasEntryBehindInQueue = false; 
+        AlarmMessageQueue * next;
+};
 
+// Class for the networking
 class Networking{
     private:
-        alarmMessageQueue_t *messageQueue;
+        AlarmMessageQueue messageQueue;
         unsigned long lastMessageSent;
-        void SendAlarmMessage(alarmMessage_t message);
+        void SendAlarmMessage(AlarmMessage msg);
+        int msgAmount = 0;
+        void PrivateAddToQueue(AlarmMessage msg);
+        void RemoveFirstIndex();
     public:
         Networking();
         void CheckAlarmMessageQueue();
         void ResetMessageDelay();
-        void AddMessageToQueue(alarmMessage_t msg);
-        alarmMessage_t MakeAlarmMessage(char type, 
-                                        short timeStamp, 
-                                        long valueLDR, 
-                                        long valueUltrasonic, 
-                                        char bitmap);
+        void AddMessageToQueue(AlarmMessage msg);
+        void RemoveAllFromQueue();
+        AlarmMessage MakeAlarmMessage(char type, 
+                                      short timeStamp, 
+                                      long valueLDR, 
+                                      long valueUltrasonic, 
+                                      bool valuePIR);
 };
 
 #endif
