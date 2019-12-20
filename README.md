@@ -14,4 +14,6 @@ The following hardware is used in the solution:
 - **LDR:** *No model-number*
 - **RFID Reader:** RFID-RC522
 - **LED:** *No model-number*
+
+![Wire layout](https://raw.githubusercontent.com/Gamped/IoT-alarm/Dev/wireLayout.png)
 ## If you want the report, then just contact me :)
